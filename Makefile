@@ -1,4 +1,4 @@
-PROJECT_NAME = service_template
+PROJECT_NAME = userver_project
 NPROCS ?= $(shell nproc)
 CLANG_FORMAT ?= clang-format
 DOCKER_COMPOSE ?= docker-compose

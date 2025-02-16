@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12...3.31)
-project(service_template CXX)
+project(userver_project CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(DownloadUserver)
@@ -17,6 +17,8 @@ userver_setup_environment()
 add_library(${PROJECT_NAME}_objs OBJECT
     src/hello.hpp
     src/hello.cpp
+    src/handlers/scan.cpp
+    src/handlers/scan.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core)
 
