@@ -19,6 +19,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/hello.cpp
     src/handlers/scan.cpp
     src/handlers/scan.hpp
+    src/network/scanner.cpp
+    src/network/scanner.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core)
 

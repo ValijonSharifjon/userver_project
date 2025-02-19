@@ -1,5 +1,9 @@
 #include "scan.hpp"
 #include <userver/server/handlers/http_handler_base.hpp>
+#include <userver/formats/json.hpp>
+#include <userver/formats/json/value_builder.hpp>
+#include "../network/scanner.hpp"
+
 namespace scan_namespace {
     namespace {
         class ScanHandler final : public userver::server::handlers::HttpHandlerBase {
@@ -8,10 +12,30 @@ namespace scan_namespace {
                 using HttpHandlerBase::HttpHandlerBase;
 
                 std::string HandleRequestThrow(
-                    const userver::server::http::HttpRequest&,
+                    const userver::server::http::HttpRequest& request,
                     userver::server::request::RequestContext&
                 ) const override {
-                    return "Your ip bla bla";
+                    auto network = request.GetArg("network");
+
+                    if (network.empty()) {
+                        throw userver::server::handlers::ClientError(
+                            userver::server::handlers::ExternalBody{"Missing 'network' parameter"}
+                        );
+                    }
+
+                    auto devices = network_scanner::ScanNetwork(network);
+
+                    userver::formats::json::ValueBuilder json_builder;
+
+                    for (const auto& device : devices) {
+                        userver::formats::json::ValueBuilder device_json;
+                        device_json["ip"] = device.ip;
+                        device_json["name"] = device.name;
+                        device_json["online"] = device.online;
+                        json_builder.PushBack(std::move(device_json));
+                    }
+
+                    return userver::formats::json::ToString(json_builder.ExtractValue());
                 }
         };
     }
