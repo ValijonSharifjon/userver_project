@@ -11,4 +11,6 @@ namespace network_scanner {
 
     std::vector<Device> ScanNetwork(const std::string& network);
     std::vector<Device> ArpScan(const std::string& network);
+    std::string GetDeviceName(const std::string& ip);
+    bool IsDeviceOnline(const std::string& ip);
 }
